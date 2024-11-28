@@ -1,12 +1,11 @@
 import datetime
 import os
-import tkinter as tk
-from tkinter import messagebox
 
 MAX = 100
-NOTES_ID = 0  # Define first notes id
+NOTES = 0  # Define first notes id
 NOTES_ARY = [""] * MAX  # Define notes array
-NOTES_TITLE_ARY = [""] * MAX  # Define notes title function array
+NOTES_TITLE = [""] * MAX  # Define notes title function array
+NOTES_TIME = [""] * MAX
 
 def display_welcome():
     print("Welcome to Notes Organizer")
@@ -40,13 +39,15 @@ def add_function():
             main()
 
     def add_notes():
-        global NOTES_ID  # Allow NOTES_ID can be appended
-        if NOTES_ID < MAX:  # If notes quantity didn't reach maximum = 100
+        global NOTES  # Allow NOTES_ID can be appended
+        if NOTES < MAX:  # If notes quantity didn't reach maximum = 100
             title = input("Please enter your notes title:\n")  # Notes title
-            NOTES_TITLE_ARY[NOTES_ID] = title
+            NOTES_TITLE[NOTES] = title
             notes = input("Please enter your notes:\n")  # Notes
-            NOTES_ARY[NOTES_ID] = notes
-            NOTES_ID += 1
+            NOTES_ARY[NOTES] = notes
+            time = datetime.datetime.now().strftime("%D-%H:%M:%S")
+            NOTES_TIME[NOTES] = time
+            NOTES += 1
             clear()
             print("NOTES ADD SUCCESSFUL")
             add_display()
@@ -58,11 +59,11 @@ def add_function():
     add_display()
 
 def view_function():
-    global NOTES_ID
+    global NOTES
     print("VIEW FUNCTION  -  NOTE LIST")
-    print("ID NOTE-TITLE")
-    for i in range(NOTES_ID):
-        print(f"{i} {""} {NOTES_TITLE_ARY[i]}")
+    print("ID TITLE")
+    for i in range(NOTES):
+        print(f"{i} {""} {NOTES_TITLE[i]} {""} {NOTES_TIME[i]}")
 
     print("\nCHOOSE:")
     print("1  -  VIEW NOTE")
@@ -79,8 +80,8 @@ def view_function():
         view_function()
 
 def view_notes():
-    global NOTES_ID
-    if 0 > NOTES_ID + 1:
+    global NOTES
+    if 0 > NOTES + 1:
         print("NO NOTES CURRENTLY FOUND")
     else:
         ID_INPUT = input("ENTER NOTE ID: ")
@@ -102,28 +103,33 @@ def view_notes():
 
 def edit_function():
     print("EDIT FUNCTION")
+    print("NOTES LIST:")
+    print("ID TITLE")
+    for i in range(NOTES):
+        print(f"{i} {""} {NOTES_TITLE[i]}")
 
 def delete_function():
-    global NOTES_ID
+    global NOTES
     print("DELETE FUNCTION")
     print("NOTES LIST:")
-    print("ID NOTE-TITLE")
-    for i in range(NOTES_ID):
-        print(f"{i} {""} {NOTES_TITLE_ARY[i]}") #Print out the note list
-    delete_choose = input("PLEASE INPUT THE NOTE ID:")
-    NOTES_ARY.pop(int(delete_choose))
-    NOTES_TITLE_ARY.pop(int(delete_choose))
+    print("ID TITLE")
+    for i in range(NOTES):
+        print(f"{i} {""} {NOTES_TITLE[i]}") #Print out the note list
+    delete_choose = int(input("PLEASE INPUT THE NOTE ID:"))
+    NOTES_ARY.pop(delete_choose)
+    NOTES_TITLE.pop(delete_choose)
+    NOTES_TIME.pop(delete_choose)
 
-    for i in range(int(delete_choose), int(NOTES_ID - 1)):
+    for i in range(int(delete_choose), int(NOTES - 1)):
         NOTES_ARY[i + 1] = NOTES_ARY[i]
 
-    NOTES_ID -= 1
+    NOTES -= 1
 
 def clear_function():
     conform_choose = input("!!!-- DID YOU CONFORM TO CLEAR DATA? --!!! (YES/NO): ").upper()
     if conform_choose == "YES":
         NOTES_ARY.clear()
-        NOTES_TITLE_ARY.clear()
+        NOTES_TITLE.clear()
         clear()
         main()
     elif conform_choose == "NO":
